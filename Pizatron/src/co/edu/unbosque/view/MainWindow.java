@@ -46,13 +46,14 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 	int xDim = 1700 ,yDim = 800;
 	
 	//Menu Configuraciones
-	JPanel configPanel = new JPanel() , mainCon = new JPanel();
-	String[] sizes ={"500,250","800,400","1700,800","2000,1000",};
+	JPanel configPanel = new JPanel() , mainCon = new JPanel(),textP = new JPanel();
+	String[] sizes ={"1700,800","2000,1000"};
 	JComboBox res = new JComboBox(sizes) ;
 	JSlider volumen = new JSlider(0,100,50);
-	JLabel resLabel = new JLabel(), volumenLabel = new JLabel();
-	JButton backB = new JButton();
+	JLabel resLabel = new JLabel(), volumenLabel = new JLabel(),playerNlabel = new JLabel();
+	JButton backB = new JButton(), summit = new JButton();
 	ImageIcon backBIMG = new ImageIcon("backB.png");
+	JTextField txtF = new JTextField();
 	
 	
 	
@@ -155,11 +156,35 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		
 	}
 	
-	public void config(JComboBox res,JFrame frame,JPanel mainCon,JPanel configPanel,JSlider volumen,JLabel resLabel,JLabel volumenLabel,JButton backB,ImageIcon backBIMG) {
+	public void config(JComboBox res,JFrame frame,JPanel mainCon,JPanel configPanel,JPanel textP,JLabel playerNlabel , JSlider volumen,JLabel resLabel,JLabel volumenLabel,JButton backB,ImageIcon backBIMG,JButton summit,JTextField txtF) {
 		
 		mainCon.setVisible(true);
 		configPanel.setVisible(true);
 		loadCon = true;
+		
+		//tstF config 
+		
+		txtF.setPreferredSize(new Dimension(1000,50));
+		txtF.setFont(new Font("Impact",Font.BOLD,40));
+		
+		//playerNlabel config
+		playerNlabel.setHorizontalAlignment(JTextField.CENTER);
+		playerNlabel.setText("Nombre del Jugador");
+		playerNlabel.setFont(new Font("Impact", Font.PLAIN,50));
+		playerNlabel.setBackground(new Color(0xFFC56A));
+		
+		//summit config
+		summit.addActionListener(this);
+		summit.setPreferredSize(new Dimension(200,50));
+		summit.setFont(new Font("impact",Font.PLAIN,20));
+		summit.setText("OK");
+		
+		
+		
+		//textP config
+		textP.setBackground(new Color(0xFFC56A));
+		textP.add(txtF);
+		textP.add(summit);
 		
 		place = 1;
 		//config panel configuration 
@@ -179,7 +204,7 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		volumenLabel.setBackground(new Color(0xFFC56A));
 		
 		//mainCon
-		mainCon.setLayout(new GridLayout(5,1));
+		mainCon.setLayout(new GridLayout(7,1));
 		mainCon.setBackground(new Color(0xFFC55A));
 		mainCon.add(res);
 		mainCon.add(volumen);
@@ -209,15 +234,18 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		
 		configPanel.add(mainCon,BorderLayout.CENTER);
 		mainCon.add(backB);
+		mainCon.add(playerNlabel);
+		mainCon.add(textP);
 		mainCon.add(resLabel);
 		mainCon.add(res);
 		mainCon.add(volumenLabel);
 		mainCon.add(volumen);
 		
 		
-		
 	}
-	public void helpChange() {
+	
+	
+	public void help(JPanel instructionsL,JPanel instructionsR, JPanel pizzaT,JPanel menu,JPanel toppings, JPanel count,JLabel pTittle,JLabel pDes ,JLabel menuTittle, JLabel menuDes,JButton backB) {
 		
 		
 	}
@@ -280,7 +308,7 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 					
 				}
 				else {
-					config(res,this,mainCon,configPanel,volumen,resLabel,volumenLabel,backB,backBIMG);
+					config(res,this,mainCon,configPanel,textP,playerNlabel,volumen,resLabel,volumenLabel,backB,backBIMG,summit,txtF);
 				}
 		}
 			else if(e.getSource()==infoB) {
@@ -291,17 +319,7 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		}
 		if(place==1) {
 			if(e.getSource()==res) {
-				if(res.getSelectedItem()=="500,250") {
-					xDim = 500;
-					yDim = 250;
-					this.setSize(xDim,yDim);
-				}
-				else if(res.getSelectedItem()=="800,400") {
-					xDim = 800;
-					yDim = 400;
-					this.setSize(xDim,yDim);
-				}
-				else if(res.getSelectedItem()=="1700,800") {
+				if(res.getSelectedItem()=="1700,800") {
 					xDim = 1700;
 					yDim = 800;
 					this.setSize(xDim,yDim);
@@ -316,6 +334,10 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 				configPanel.setVisible(false);
 				changeLaunchMenu(left,right);
 				
+			}
+			else if(e.getSource()==summit) {
+				String name = txtF.getText();
+				System.out.println("backEnd "+ name);
 			}
 		}
 	}
