@@ -27,7 +27,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeListener; 
 
 public class MainWindow extends JFrame implements MouseListener, ActionListener, ChangeListener{
 	
@@ -39,9 +39,9 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 	
 	//Menu principal
 	JPanel left = new JPanel(),right = new JPanel(),buttonsPanel= new JPanel();
-	ImageIcon bgImage,iconIMG = new ImageIcon("logo.png"),config = new ImageIcon("config.png"),help = new ImageIcon("info.png"),playBIMG = new ImageIcon("playB.png");;
+	ImageIcon bgImage,iconIMG = new ImageIcon("logo.png"),config = new ImageIcon("config.png"),help = new ImageIcon("info.png"),playBIMG = new ImageIcon("playB.png"),bg = new ImageIcon("bg.png");
 	JButton playB = new JButton(playBIMG) ,configB = new JButton(config),infoB = new JButton(help);
-	JLabel iconLabel = new JLabel();
+	JLabel iconLabel = new JLabel(), bgL = new JLabel();
 	JTextPane leaderboard = new JTextPane();
 	int xDim = 1700 ,yDim = 800;
 	
@@ -55,6 +55,14 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 	ImageIcon backBIMG = new ImageIcon("backB.png");
 	JTextField txtF = new JTextField();
 	
+	//Game configurations
+	JLabel bggL = new JLabel(), belt = new JLabel(), pizza = new JLabel(), topping1,topping2 = new JLabel(),topping3 = new JLabel(),
+	whiteboard = new JLabel() ,ingridient1W = new JLabel(), ingridient2W = new JLabel(),
+	ingridient3W = new JLabel(),sauce1 = new JLabel(), sauce2 = new JLabel(),seaW = new JLabel(), anch = new JLabel(), calam = new JLabel(),coins = new JLabel(),
+	cheese = new JLabel();
+	JPanel cNp = new JPanel(), ingredients = new JPanel(), wBoard = new JPanel();
+	ImageIcon bgg = new ImageIcon("background.png");
+	
 	
 	
 	
@@ -64,7 +72,7 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		setSize(xDim,yDim);
 		setVisible(true);
 		setTitle("Pizzatron 3000");
-		launchMenu(left,right,iconLabel,buttonsPanel,playB,configB,infoB,leaderboard,this,bgImage,iconIMG,config,help,playBIMG);
+		launchMenu(left,right,iconLabel,buttonsPanel,playB,configB,infoB,leaderboard,this,bgImage,iconIMG,config,help,playBIMG,bg,bgL);
 		
 		setResizable(false);
 		
@@ -83,18 +91,28 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		configPanel.setVisible(true);
 	}
 	
-	public void launchMenu(JPanel left ,JPanel right  ,JLabel iconLabel ,JPanel buttonsPanel, JButton playB ,JButton configB ,JButton infoB ,JTextPane leaderboard ,JFrame frame,ImageIcon bgImage ,ImageIcon iconIMG,ImageIcon config,ImageIcon help,ImageIcon playBIMG){
+	public void launchMenu(JPanel left ,JPanel right  ,JLabel iconLabel ,JPanel buttonsPanel, JButton playB ,JButton configB ,JButton infoB ,JTextPane leaderboard ,JFrame frame,ImageIcon bgImage ,ImageIcon iconIMG,ImageIcon config,ImageIcon help,ImageIcon playBIMG,ImageIcon bg,JLabel bgL){
 		left.setVisible(true);
 		right.setVisible(true);
 		frame.setLayout(new BorderLayout());
+		
+		
+		
+		
 		//left configurations
 		int leftDimX = (xDim/2)+ 20;
 		left.setPreferredSize(new Dimension(leftDimX,50));
 		left.setLayout(new GridLayout(4,1));
 		left.setBackground(new Color(0xFFC55A));
+		
+		
 		//right configurations
 		right.setPreferredSize(new Dimension((xDim/2)-20,50));
-		right.setBackground(Color.blue);
+		right.add(bgL);
+		bgL.setIcon(bg);
+		
+		
+		
 		
 		//butonsPanel Config
 		
@@ -143,8 +161,8 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		
 		frame.add(left,BorderLayout.WEST);
 		frame.add(right,BorderLayout.CENTER);
-		left.add(iconLabel);
 		iconLabel.setIcon(iconIMG);
+		left.add(iconLabel);
 		left.add(leaderboard);
 		left.add(playB);
 		left.add(buttonsPanel);
@@ -249,6 +267,42 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		
 		
 	}
+	public void game(JLabel bggL,JLabel belt,JLabel pizza,JLabel topping1,JLabel topping2,JLabel topping3,JLabel whiteboard , JLabel ingridient1W,JLabel ingridient2W,JLabel ingridient3W,JLabel sauce1,JLabel sauce2,JLabel seaW,JLabel anch ,JLabel calam,JLabel coins,JLabel cheese,JPanel cNp,JPanel ingredients,JPanel wBoard,JFrame frame,ImageIcon bgg){
+		whiteboard.add(ingridient1W);
+		whiteboard.add(ingridient2W);
+		whiteboard.add(ingridient3W);
+		frame.add(bggL);
+		bggL.setIcon(bgg);
+		
+		ingredients.setBackground(Color.BLUE);
+		cNp.setBackground(Color.red);
+		whiteboard.setBackground(Color.WHITE);
+		
+		
+		pizza.setSize(new Dimension(200,200));
+		topping1.setSize(new Dimension(50,50));
+		topping2.setSize(new Dimension(50,50));
+		topping3.setSize(new Dimension(50,50));
+		pizza.add(topping1);
+		pizza.add(topping2);
+		pizza.add(topping3);
+		
+		ingredients.setLayout(new GridLayout(1,6));
+		ingredients.add(sauce1);
+		ingredients.add(sauce2);
+		ingredients.add(cheese);
+		ingredients.add(seaW);
+		ingredients.add(anch);
+		ingredients.add(calam);
+		
+		cNp.add(belt);
+		belt.add(pizza);
+		bggL.add(cNp,BorderLayout.SOUTH);
+		bggL.add(ingredients,BorderLayout.CENTER);
+		bggL.add(whiteboard,BorderLayout.WEST);
+		
+		
+	}
 	
 	public static void appendToPane(JTextPane tp, String txt, Color clr,int size) {
         StyleContext sc = StyleContext.getDefaultStyleContext();
@@ -299,6 +353,7 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 				System.out.println("play");
 				left.setVisible(false);
 				right.setVisible(false);
+				game(bggL,belt,pizza,topping1,topping2,topping3,whiteboard ,ingridient1W,ingridient2W,ingridient3W, sauce1,sauce2,seaW,anch ,calam,coins,cheese, cNp,ingredients,wBoard,this,bgg);
 		}
 			else if(e.getSource()==configB) {
 				left.setVisible(false);
@@ -347,5 +402,3 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		
 		
 	}
-
-}
