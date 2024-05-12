@@ -11,7 +11,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -27,7 +30,9 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener; 
+import javax.swing.event.ChangeListener;
+
+import co.edu.unbosque.view.Music;
 
 public class MainWindow extends JFrame implements MouseListener, ActionListener, ChangeListener{
 	
@@ -36,43 +41,46 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 	boolean loadHelp = false;
 	boolean loadGame = false;
 	
+	Music musica = new Music();
+	public static float vol = 3;
 	
 	//Menu principal
-	JPanel left = new JPanel(),right = new JPanel(),buttonsPanel= new JPanel();
-	ImageIcon bgImage,iconIMG = new ImageIcon("logo.png"),config = new ImageIcon("config.png"),help = new ImageIcon("info.png"),playBIMG = new ImageIcon("playB.png"),bg = new ImageIcon("bg.png");
+	JPanel left = new JPanel(),buttonsPanel= new JPanel();
+	ImageIcon bgImage,iconIMG = new ImageIcon("logo.png"),config = new ImageIcon("config.png"),help = new ImageIcon("info.png"),playBIMG = new ImageIcon("playB.png"),menu = new ImageIcon("menu.png");
 	JButton playB = new JButton(playBIMG) ,configB = new JButton(config),infoB = new JButton(help);
-	JLabel iconLabel = new JLabel(), bgL = new JLabel();
+	JLabel iconLabel = new JLabel();
 	JTextPane leaderboard = new JTextPane();
-	int xDim = 1700 ,yDim = 800;
+	JLabel right = new JLabel();
+	
+	public static int xDim = 1700;
+	public static int yDim = 800;
 	
 	//Menu Configuraciones
-	JPanel configPanel = new JPanel() , mainCon = new JPanel(),textP = new JPanel();
-	String[] sizes ={"1700,800","2000,1000"};
+	JPanel configPanel = new JPanel() , mainCon = new JPanel();
+	String[] sizes ={"1700,800","2000,1000",};
 	JComboBox res = new JComboBox(sizes) ;
-	JSlider volumen = new JSlider(0,100,50);
-	JLabel resLabel = new JLabel(), volumenLabel = new JLabel(),playerNlabel = new JLabel();
-	JButton backB = new JButton(), summit = new JButton();
+	JSlider volumen = new JSlider(0,6,3);
+	JLabel resLabel = new JLabel(), volumenLabel = new JLabel();
+	JButton backB = new JButton();
 	ImageIcon backBIMG = new ImageIcon("backB.png");
-	JTextField txtF = new JTextField();
 	
-	//Game configurations
-	JLabel bggL = new JLabel(), belt = new JLabel(), pizza = new JLabel(), topping1,topping2 = new JLabel(),topping3 = new JLabel(),
-	whiteboard = new JLabel() ,ingridient1W = new JLabel(), ingridient2W = new JLabel(),
-	ingridient3W = new JLabel(),sauce1 = new JLabel(), sauce2 = new JLabel(),seaW = new JLabel(), anch = new JLabel(), calam = new JLabel(),coins = new JLabel(),
-	cheese = new JLabel();
-	JPanel cNp = new JPanel(), ingredients = new JPanel(), wBoard = new JPanel();
-	ImageIcon bgg = new ImageIcon("background.png");
+	//Game configurations 
 	
 	
 	
 	
 	
-	public MainWindow(){
+	
+	
+	
+	
+	public MainWindow() throws LineUnavailableException, UnsupportedAudioFileException, IOException{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(xDim,yDim);
 		setVisible(true);
+		
 		setTitle("Pizzatron 3000");
-		launchMenu(left,right,iconLabel,buttonsPanel,playB,configB,infoB,leaderboard,this,bgImage,iconIMG,config,help,playBIMG,bg,bgL);
+		launchMenu(left,right,iconLabel,buttonsPanel,playB,configB,infoB,leaderboard,this,bgImage,iconIMG,config,help,playBIMG);
 		
 		setResizable(false);
 		
@@ -81,7 +89,7 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		
 		
 	}
-	public void changeLaunchMenu(JPanel left,JPanel Right) {
+	public void changeLaunchMenu(JPanel left,JLabel Right) {
 		place = 0;
 		left.setVisible(true);
 		right.setVisible(true);
@@ -91,27 +99,21 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		configPanel.setVisible(true);
 	}
 	
-	public void launchMenu(JPanel left ,JPanel right  ,JLabel iconLabel ,JPanel buttonsPanel, JButton playB ,JButton configB ,JButton infoB ,JTextPane leaderboard ,JFrame frame,ImageIcon bgImage ,ImageIcon iconIMG,ImageIcon config,ImageIcon help,ImageIcon playBIMG,ImageIcon bg,JLabel bgL){
+	public void launchMenu(JPanel left ,JLabel right  ,JLabel iconLabel ,JPanel buttonsPanel, JButton playB ,JButton configB ,JButton infoB ,JTextPane leaderboard ,JFrame frame,ImageIcon bgImage ,ImageIcon iconIMG,ImageIcon config,ImageIcon help,ImageIcon playBIMG) throws LineUnavailableException, UnsupportedAudioFileException, IOException{
+		musica.play();
+		volumen.addChangeListener(this);
+		
 		left.setVisible(true);
 		right.setVisible(true);
 		frame.setLayout(new BorderLayout());
-		
-		
-		
-		
 		//left configurations
 		int leftDimX = (xDim/2)+ 20;
 		left.setPreferredSize(new Dimension(leftDimX,50));
 		left.setLayout(new GridLayout(4,1));
 		left.setBackground(new Color(0xFFC55A));
-		
-		
-		//right configurations
-		right.setPreferredSize(new Dimension((xDim/2)-20,50));
-		right.add(bgL);
-		bgL.setIcon(bg);
-		
-		
+		//right config
+		right.setIcon(menu);
+		right.setPreferredSize(new Dimension((MainWindow.xDim/2)-20,yDim));
 		
 		
 		//butonsPanel Config
@@ -161,48 +163,33 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		
 		frame.add(left,BorderLayout.WEST);
 		frame.add(right,BorderLayout.CENTER);
-		iconLabel.setIcon(iconIMG);
 		left.add(iconLabel);
+		iconLabel.setIcon(iconIMG);
 		left.add(leaderboard);
 		left.add(playB);
 		left.add(buttonsPanel);
 		buttonsPanel.add(configB);
 		buttonsPanel.add(infoB);
+		frame.pack();
 		
 		
 		
 		
 	}
 	
-	public void config(JComboBox res,JFrame frame,JPanel mainCon,JPanel configPanel,JPanel textP,JLabel playerNlabel , JSlider volumen,JLabel resLabel,JLabel volumenLabel,JButton backB,ImageIcon backBIMG,JButton summit,JTextField txtF) {
+	JPanel belt = new JPanel(),whiteboard = new JPanel(),costumers = new JPanel(),pizaP = new JPanel(),ingredients = new JPanel();
+	JLabel beltL = new JLabel(),pizaWlabel= new JLabel(),ingLW= new JLabel(),ing2LW= new JLabel(),ing3LW= new JLabel(),ing1= new JLabel(),ing2= new JLabel(),ing3= new JLabel();
+	ImageIcon beltIMG = new ImageIcon(),pizaWlabelIMG = new ImageIcon() ,ingWIMG = new ImageIcon() ,ing2WIMG= new ImageIcon(),ing3WIMG= new ImageIcon(),ing1IMG= new ImageIcon(), ing2IMG = new ImageIcon(),ing3IMG= new ImageIcon();
+	
+	public void game() {
+		
+	}
+	
+	public void config(JComboBox res,JFrame frame,JPanel mainCon,JPanel configPanel,JSlider volumen,JLabel resLabel,JLabel volumenLabel,JButton backB,ImageIcon backBIMG) {
 		
 		mainCon.setVisible(true);
 		configPanel.setVisible(true);
 		loadCon = true;
-		
-		//tstF config 
-		
-		txtF.setPreferredSize(new Dimension(1000,50));
-		txtF.setFont(new Font("Impact",Font.BOLD,40));
-		
-		//playerNlabel config
-		playerNlabel.setHorizontalAlignment(JTextField.CENTER);
-		playerNlabel.setText("Nombre del Jugador");
-		playerNlabel.setFont(new Font("Impact", Font.PLAIN,50));
-		playerNlabel.setBackground(new Color(0xFFC56A));
-		
-		//summit config
-		summit.addActionListener(this);
-		summit.setPreferredSize(new Dimension(200,50));
-		summit.setFont(new Font("impact",Font.PLAIN,20));
-		summit.setText("OK");
-		
-		
-		
-		//textP config
-		textP.setBackground(new Color(0xFFC56A));
-		textP.add(txtF);
-		textP.add(summit);
 		
 		place = 1;
 		//config panel configuration 
@@ -222,7 +209,7 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		volumenLabel.setBackground(new Color(0xFFC56A));
 		
 		//mainCon
-		mainCon.setLayout(new GridLayout(7,1));
+		mainCon.setLayout(new GridLayout(5,1));
 		mainCon.setBackground(new Color(0xFFC55A));
 		mainCon.add(res);
 		mainCon.add(volumen);
@@ -252,57 +239,19 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		
 		configPanel.add(mainCon,BorderLayout.CENTER);
 		mainCon.add(backB);
-		mainCon.add(playerNlabel);
-		mainCon.add(textP);
 		mainCon.add(resLabel);
 		mainCon.add(res);
 		mainCon.add(volumenLabel);
 		mainCon.add(volumen);
 		
 		
-	}
-	
-	
-	public void help(JPanel instructionsL,JPanel instructionsR, JPanel pizzaT,JPanel menu,JPanel toppings, JPanel count,JLabel pTittle,JLabel pDes ,JLabel menuTittle, JLabel menuDes,JButton backB) {
-		
 		
 	}
-	public void game(JLabel bggL,JLabel belt,JLabel pizza,JLabel topping1,JLabel topping2,JLabel topping3,JLabel whiteboard , JLabel ingridient1W,JLabel ingridient2W,JLabel ingridient3W,JLabel sauce1,JLabel sauce2,JLabel seaW,JLabel anch ,JLabel calam,JLabel coins,JLabel cheese,JPanel cNp,JPanel ingredients,JPanel wBoard,JFrame frame,ImageIcon bgg){
-		whiteboard.add(ingridient1W);
-		whiteboard.add(ingridient2W);
-		whiteboard.add(ingridient3W);
-		frame.add(bggL);
-		bggL.setIcon(bgg);
-		
-		ingredients.setBackground(Color.BLUE);
-		cNp.setBackground(Color.red);
-		whiteboard.setBackground(Color.WHITE);
-		
-		
-		pizza.setSize(new Dimension(200,200));
-		topping1.setSize(new Dimension(50,50));
-		topping2.setSize(new Dimension(50,50));
-		topping3.setSize(new Dimension(50,50));
-		pizza.add(topping1);
-		pizza.add(topping2);
-		pizza.add(topping3);
-		
-		ingredients.setLayout(new GridLayout(1,6));
-		ingredients.add(sauce1);
-		ingredients.add(sauce2);
-		ingredients.add(cheese);
-		ingredients.add(seaW);
-		ingredients.add(anch);
-		ingredients.add(calam);
-		
-		cNp.add(belt);
-		belt.add(pizza);
-		bggL.add(cNp,BorderLayout.SOUTH);
-		bggL.add(ingredients,BorderLayout.CENTER);
-		bggL.add(whiteboard,BorderLayout.WEST);
+	public void helpChange() {
 		
 		
 	}
+	
 	
 	public static void appendToPane(JTextPane tp, String txt, Color clr,int size) {
         StyleContext sc = StyleContext.getDefaultStyleContext();
@@ -353,7 +302,6 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 				System.out.println("play");
 				left.setVisible(false);
 				right.setVisible(false);
-				game(bggL,belt,pizza,topping1,topping2,topping3,whiteboard ,ingridient1W,ingridient2W,ingridient3W, sauce1,sauce2,seaW,anch ,calam,coins,cheese, cNp,ingredients,wBoard,this,bgg);
 		}
 			else if(e.getSource()==configB) {
 				left.setVisible(false);
@@ -363,7 +311,7 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 					
 				}
 				else {
-					config(res,this,mainCon,configPanel,textP,playerNlabel,volumen,resLabel,volumenLabel,backB,backBIMG,summit,txtF);
+					config(res,this,mainCon,configPanel,volumen,resLabel,volumenLabel,backB,backBIMG);
 				}
 		}
 			else if(e.getSource()==infoB) {
@@ -390,15 +338,18 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 				changeLaunchMenu(left,right);
 				
 			}
-			else if(e.getSource()==summit) {
-				String name = txtF.getText();
-				System.out.println("backEnd "+ name);
-			}
 		}
 	}
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
+		if(e.getSource()==volumen) {
+			vol = volumen.getValue();
+			System.out.println(vol);
+			musica.volumeCH(vol);
+		}
 		
 		
 	}
+
+}
