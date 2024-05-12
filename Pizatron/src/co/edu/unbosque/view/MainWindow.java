@@ -31,6 +31,7 @@ import javax.swing.text.StyleContext;
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.JLayeredPane;
 
 import co.edu.unbosque.view.Music;
 
@@ -177,11 +178,31 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		
 	}
 	
-	JPanel belt = new JPanel(),whiteboard = new JPanel(),costumers = new JPanel(),pizaP = new JPanel(),ingredients = new JPanel();
-	JLabel beltL = new JLabel(),pizaWlabel= new JLabel(),ingLW= new JLabel(),ing2LW= new JLabel(),ing3LW= new JLabel(),ing1= new JLabel(),ing2= new JLabel(),ing3= new JLabel();
-	ImageIcon beltIMG = new ImageIcon(),pizaWlabelIMG = new ImageIcon() ,ingWIMG = new ImageIcon() ,ing2WIMG= new ImageIcon(),ing3WIMG= new ImageIcon(),ing1IMG= new ImageIcon(), ing2IMG = new ImageIcon(),ing3IMG= new ImageIcon();
+	JLayeredPane whiteboard = new JLayeredPane(),costumers = new JLayeredPane(),pizaP = new JLayeredPane();
+	JLabel pizaWlabel= new JLabel(),ingLW= new JLabel(),ing2LW= new JLabel(),ing3LW= new JLabel(),ing1= new JLabel(),ing2= new JLabel(),ing3= new JLabel(),background = new JLabel();;
+	ImageIcon beltIMG = new ImageIcon(),pizaWlabelIMG = new ImageIcon() ,ingWIMG = new ImageIcon() ,ing2WIMG= new ImageIcon(),ing3WIMG= new ImageIcon(),ing1IMG= new ImageIcon(), ing2IMG = new ImageIcon(),ing3IMG= new ImageIcon(),backgrounIMG = new ImageIcon("bg.png");
 	
-	public void game() {
+	public void game(JFrame frame) {
+		background.setIcon(backgrounIMG);
+		whiteboard.setOpaque(true);
+		ingLW.setOpaque(true);
+		
+		ingLW.setBackground(Color.blue);
+		ingLW.setBounds(10, 10, 570, 100);
+		
+		
+		frame.add(background);
+		whiteboard.setBounds(1048, 42, 589, 329);
+		whiteboard.setBackground(Color.green);
+		whiteboard.add(ingLW);
+		//whiteboard.add(ingredient2);
+		
+		
+		background.add(whiteboard);
+		
+		
+		
+		
 		
 	}
 	
@@ -302,6 +323,7 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 				System.out.println("play");
 				left.setVisible(false);
 				right.setVisible(false);
+				game(this);
 		}
 			else if(e.getSource()==configB) {
 				left.setVisible(false);
