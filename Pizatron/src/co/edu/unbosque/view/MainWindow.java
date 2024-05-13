@@ -35,8 +35,10 @@ import javax.swing.event.ChangeListener;
 import javax.swing.JLayeredPane;
 
 import co.edu.unbosque.view.Music;
+import co.edu.unbosque.model.CurrentPizza;
 
 public class MainWindow extends JFrame implements MouseListener, ActionListener, ChangeListener{
+	int pizaPos=0;
 	
 	int place = 0;
 	boolean loadCon = false;
@@ -179,23 +181,28 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		
 	}
 	
-	JLayeredPane whiteboard = new JLayeredPane(),costumers = new JLayeredPane(),pizaP = new JLayeredPane();
+	JLayeredPane whiteboard = new JLayeredPane(),costumers = new JLayeredPane();
 	JLabel pizaWlabel= new JLabel(),ingLW= new JLabel(),ing2LW= new JLabel(),ing3LW= new JLabel(),ing1= new JLabel(),ing2= new JLabel(),ing3= new JLabel(),background = new JLabel(),sauce1 = new JLabel(),sauce2 = new JLabel(),
-			chese = new JLabel(),seaW = new JLabel(), anch = new JLabel(),calamar = new JLabel();
+			chese = new JLabel(),seaW = new JLabel(), anch = new JLabel(),calamar = new JLabel(),pizaPlabel = new JLabel();;
 	ImageIcon pizaWlabelIMG,backgrounIMG = new ImageIcon("bg.png"),topping1 = new ImageIcon(),topping2 = new ImageIcon(), topping3 = new ImageIcon(),
 			cheseIMG = new ImageIcon("cheese_box.png"),sauce1IMG = new ImageIcon("sauce.png"),sauce2IMG = new ImageIcon("sauce2.png"),seaWWIMG = new ImageIcon("topping_1_3_dropped.png"),anchWIMG = new ImageIcon("topping_4_3_dropped.png"),
 			calamarWIMG = new ImageIcon("topping_3_3_dropped.png"),seaWIMG = new ImageIcon("topping_1_box.png"),anchIMG = new ImageIcon("topping_4_box.png"),
-			calaIMG = new ImageIcon("topping_3_box.png");;
+			calaIMG = new ImageIcon("topping_3_box.png"),pizaBaseIMG,pizaCuIMG;
 	int currentlyPressed;
 	Timer time ;
-	int pizaPos=0;
+	CurrentPizza pizaManager = new CurrentPizza();
+	int isFinished ;
+	int xVel =1;
 	
 	
 	
 	
 	
 	public void game(JFrame frame){
-		time = new Timer(10,null);
+		pizaManager.startArrays(pizaManager.order, pizaManager.pizaC);
+		pizaBaseIMG = new ImageIcon("pizza_base_clear.png");
+		pizaPlabel.setIcon(pizaBaseIMG);
+		
 		background.setIcon(backgrounIMG);
 		whiteboard.setOpaque(false);
 		ingLW.setOpaque(false);
@@ -209,7 +216,7 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		seaW.setOpaque(false);
 		anch.setOpaque(false);
 		calamar.setOpaque(false);
-		pizaP.setOpaque(true);
+		pizaPlabel.setOpaque(true);
 		
 		sauce1.addMouseListener(this);
 		sauce2.addMouseListener(this);
@@ -217,20 +224,21 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		seaW.addMouseListener(this);
 		anch.addMouseListener(this);
 		calamar.addMouseListener(this);
+		pizaPlabel.addMouseListener(this);
 		
 		sauce1.addMouseListener(this);
 		
 		ingLW.setBounds(10, 10, 570, 60);
 		ingLW.setFont(new Font("Impact", Font.PLAIN,50));
 		ingLW.setIcon(seaWWIMG);
-		int ing1NO = 1;
+		int ing1NO = 2;
 		ingLW.setText("  X "+ing1NO);
 		
 		
 		ing2LW.setBounds(10, 70, 570, 60);
 		ing2LW.setFont(new Font("Impact", Font.PLAIN,50));
 		ing2LW.setIcon(anchWIMG);
-		int ing2NO = 0;
+		int ing2NO = 1;
 		ing2LW.setText("  X "+ing2NO);
 		
 	
@@ -241,6 +249,8 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		ing3LW.setText("  X "+ing3NO);
 		
 		
+		
+		
 		pizaWlabel.setBounds(10, 190, 570, 150);
 		
 		whiteboard.setBounds(1048, 42, 589, 329);
@@ -248,7 +258,7 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		 
 		 //back integration
 		pizaWlabel.setFont(new Font("Impact", Font.PLAIN,50));
-		int pedidoS=1;
+		int pedidoS=2;
 		if(pedidoS==1) {
 			pizaWlabelIMG  = new ImageIcon("pizza_baseWSauce1.png");
 			pizaWlabel.setText("  Marinara");
@@ -287,9 +297,9 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		calamar.setBackground(Color.CYAN);
 		calamar.setIcon(calaIMG);
 		
-		pizaP.setBounds(pizaPos, 574, 300, 300);
+		pizaPlabel.setBounds(pizaPos, 574, 300, 300);
+		pizaPlabel.setBackground(Color.BLACK);
 		
-		pizaP.setBackground(Color.BLACK);
 		
 		costumers.add(sauce1);
 		costumers.add(sauce2);
@@ -308,10 +318,14 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		whiteboard.add(pizaWlabel);
 		
 		
-		background.add(pizaP);
+		background.add(pizaPlabel);
 		background.add(costumers);
 		background.add(whiteboard);
 		
+		
+		
+		time = new Timer(1,this);
+		time.start();
 		
 		
 		
@@ -399,6 +413,8 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
         tp.setCharacterAttributes(aset, false);
         tp.replaceSelection(txt);
 	}
+	
+	
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -414,42 +430,51 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 			
 			
 		}
-		else if(e.getSource()==sauce1) {
+		else if(e.getSource()==sauce2) {
 			currentlyPressed = 2;
 			
 		}
-		else if(e.getSource()==sauce2) {
+		else if(e.getSource()==chese) {
 			currentlyPressed = 3;
 			
 		}
-		else if(e.getSource()==chese) {
+		else if(e.getSource()==seaW) {
 			currentlyPressed = 4;
 			
 		}
-		else if(e.getSource()==seaW) {
+		else if(e.getSource()==anch) {
 			currentlyPressed = 5;
 			
 		}
-		else if(e.getSource()==anch) {
+		else if(e.getSource()==calamar) {
 			currentlyPressed = 6;
 			
 		}
-		else if(e.getSource()==calamar) {
-			currentlyPressed = 7;
-			
-		}
+		/*else if(e.getSource()==pizaPlabel) {
+			pizaPlabel.setLocation(pizaPos+1, 540);
+			System.out.println(pizaPos);
+		/}
 		
-	}
+	*/}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
+		if(e.getSource()==pizaPlabel) {
+			
+			pizaManager.itemDrop(currentlyPressed,pizaManager.pizaC);
+			pizaPlabel.setIcon(pizaManager.iconSeterCases(currentlyPressed, pizaManager.pizaC));
+			currentlyPressed = 0;
+			isFinished = pizaManager.pizaChecker(pizaManager.order, pizaManager.pizaC);
+			
+			
+			}
+			
+		}
 		
-	}
+	
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -505,14 +530,31 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 				
 			}
 		}
-		else if(place == 2) {
-			System.out.println(time);
-		if (e.getSource()== time) {
-			while(pizaPos<= xDim){
-				pizaP.setPosition(pizaP, pizaPos);
-				pizaPos = pizaPos +1 ;
-				}
+		if(place ==2) {
+			
+			
+			pizaPos = pizaPos +xVel;
+			pizaPlabel.setLocation(pizaPos, 574);
+			
+			isFinished = pizaManager.pizaChecker(pizaManager.order, pizaManager.pizaC);
+			if(isFinished==1) {
+				pizaManager.startArrays(pizaManager.order, pizaManager.pizaC);
+				pizaPlabel.setIcon(pizaBaseIMG);
+				xVel = 100;
+			}else if (isFinished == 2) {
+				pizaManager.startArrays(pizaManager.order, pizaManager.pizaC);
+				pizaPos =0;
+				
+			}else if (isFinished ==3) {
+				pizaManager.startArrays(pizaManager.order, pizaManager.pizaC);
+				
 			}
+			if(pizaPos>xDim) {
+				pizaPos=0;
+				xVel =1; 
+			}
+			//System.out.println(isFinished);
+			
 		}
 	}
 
