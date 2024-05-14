@@ -38,8 +38,9 @@ import co.edu.unbosque.view.Music;
 import co.edu.unbosque.model.CurrentPizza;
 
 public class MainWindow extends JFrame implements MouseListener, ActionListener, ChangeListener{
-	int pizaPos=0;
 	
+	int pizaPos=0;
+	int puntos = 0;
 	int place = 0;
 	boolean loadCon = false;
 	boolean loadHelp = false;
@@ -183,25 +184,34 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 	
 	JLayeredPane whiteboard = new JLayeredPane(),costumers = new JLayeredPane();
 	JLabel pizaWlabel= new JLabel(),ingLW= new JLabel(),ing2LW= new JLabel(),ing3LW= new JLabel(),ing1= new JLabel(),ing2= new JLabel(),ing3= new JLabel(),background = new JLabel(),sauce1 = new JLabel(),sauce2 = new JLabel(),
-			chese = new JLabel(),seaW = new JLabel(), anch = new JLabel(),calamar = new JLabel(),pizaPlabel = new JLabel();;
+			chese = new JLabel(),seaW = new JLabel(), anch = new JLabel(),calamar = new JLabel(),pizaPlabel = new JLabel(),
+			pIng1 = new JLabel(),pIng2 = new JLabel(),pIng3 = new JLabel(),pIng4 = new JLabel(),pIng5 = new JLabel(),puntosL = new JLabel();
 	ImageIcon pizaWlabelIMG,backgrounIMG = new ImageIcon("bg.png"),topping1 = new ImageIcon(),topping2 = new ImageIcon(), topping3 = new ImageIcon(),
 			cheseIMG = new ImageIcon("cheese_box.png"),sauce1IMG = new ImageIcon("sauce.png"),sauce2IMG = new ImageIcon("sauce2.png"),seaWWIMG = new ImageIcon("topping_1_3_dropped.png"),anchWIMG = new ImageIcon("topping_4_3_dropped.png"),
 			calamarWIMG = new ImageIcon("topping_3_3_dropped.png"),seaWIMG = new ImageIcon("topping_1_box.png"),anchIMG = new ImageIcon("topping_4_box.png"),
-			calaIMG = new ImageIcon("topping_3_box.png"),pizaBaseIMG,pizaCuIMG;
+			calaIMG = new ImageIcon("topping_3_box.png"),pizaBaseIMG,pizaCuIMG,seaWIMGP = new ImageIcon("seaW.png"),
+			anchIMGP = new ImageIcon("anch.png"),calIMGP = new ImageIcon("calamar.png"),puntosIMG = new ImageIcon("coin_ico.png");
 	int currentlyPressed;
-	Timer time ;
+	Timer time ,endG ;
 	CurrentPizza pizaManager = new CurrentPizza();
 	int isFinished ;
 	int xVel =1;
+	boolean pp1,pp2,pp3,pp4,pp5;
 	
 	
 	
 	
+	int ing1NO ;
+	int ing2NO ;
+	int ing3NO ;
 	
 	public void game(JFrame frame){
+		pizaManager.initializeOrder(pizaManager.order);
 		pizaManager.startArrays(pizaManager.order, pizaManager.pizaC);
 		pizaBaseIMG = new ImageIcon("pizza_base_clear.png");
 		pizaPlabel.setIcon(pizaBaseIMG);
+		endG = new Timer(100000,this);
+		endG.start();
 		
 		background.setIcon(backgrounIMG);
 		whiteboard.setOpaque(false);
@@ -216,7 +226,12 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		seaW.setOpaque(false);
 		anch.setOpaque(false);
 		calamar.setOpaque(false);
-		pizaPlabel.setOpaque(true);
+		pizaPlabel.setOpaque(false);
+		pIng1.setOpaque(false);
+		pIng2.setOpaque(false);
+		pIng3.setOpaque(false);
+		pIng4.setOpaque(false);
+		pIng5.setOpaque(false);
 		
 		sauce1.addMouseListener(this);
 		sauce2.addMouseListener(this);
@@ -228,24 +243,24 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		
 		sauce1.addMouseListener(this);
 		
+		ing1NO = pizaManager.order.get(3);
+		ing2NO = pizaManager.order.get(4);
+		ing3NO = pizaManager.order.get(5);
 		ingLW.setBounds(10, 10, 570, 60);
 		ingLW.setFont(new Font("Impact", Font.PLAIN,50));
 		ingLW.setIcon(seaWWIMG);
-		int ing1NO = 2;
 		ingLW.setText("  X "+ing1NO);
 		
 		
 		ing2LW.setBounds(10, 70, 570, 60);
 		ing2LW.setFont(new Font("Impact", Font.PLAIN,50));
 		ing2LW.setIcon(anchWIMG);
-		int ing2NO = 1;
 		ing2LW.setText("  X "+ing2NO);
 		
 	
 		ing3LW.setBounds(10, 130, 570, 60);
 		ing3LW.setFont(new Font("Impact", Font.PLAIN,50));
 		ing3LW.setIcon(calamarWIMG);
-		int ing3NO = 2;
 		ing3LW.setText("  X "+ing3NO);
 		
 		
@@ -258,12 +273,14 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		 
 		 //back integration
 		pizaWlabel.setFont(new Font("Impact", Font.PLAIN,50));
-		int pedidoS=2;
-		if(pedidoS==1) {
+		//System.out.println(pizaManager.pizaC.get(0));
+		
+		
+		if(pizaManager.order.get(0)==1) {
 			pizaWlabelIMG  = new ImageIcon("pizza_baseWSauce1.png");
 			pizaWlabel.setText("  Marinara");
 		}
-		else {
+		else if (pizaManager.order.get(1)==1) {
 			pizaWlabelIMG  = new ImageIcon("pizza_baseWSauce2.png");
 			pizaWlabel.setText("  Hot Sauce");
 		}
@@ -300,6 +317,26 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		pizaPlabel.setBounds(pizaPos, 574, 300, 300);
 		pizaPlabel.setBackground(Color.BLACK);
 		
+		pIng1.setBounds(23,121,50,50);
+		pIng1.setBackground(Color.blue);
+		
+		pIng2.setBounds(165,80,50,50);
+		pIng2.setBackground(Color.red);
+		
+		pIng3.setBounds(160,140,50,50);
+		pIng3.setBackground(Color.green);
+		
+		pIng4.setBounds(90,150,50,50);
+		pIng4.setBackground(Color.black);
+		
+		pIng5.setBounds(100,90,50,50);
+		pIng5.setBackground(Color.cyan);
+		
+		puntosL.setBounds(0, 0, 300, 500);
+		puntosL.setFont(new Font("Impact", Font.PLAIN,50));
+		puntosL.setIcon(puntosIMG);
+		puntosL.setText(" X"+puntos);
+		
 		
 		costumers.add(sauce1);
 		costumers.add(sauce2);
@@ -307,6 +344,12 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		costumers.add(seaW);
 		costumers.add(anch);
 		costumers.add(calamar);
+		pizaPlabel.add(pIng1);
+		pizaPlabel.add(pIng2);
+		pizaPlabel.add(pIng3);
+		pizaPlabel.add(pIng4);
+		pizaPlabel.add(pIng5);
+		background.add(puntosL);
 		
 		
 		
@@ -331,6 +374,26 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		
 		
 		
+		
+	}
+	
+	JLabel resultScreen = new JLabel();
+	ImageIcon ending1 = new ImageIcon("1.png"),ending2 = new ImageIcon("2.png"),ending3 = new ImageIcon("3.png"),ending4 = new ImageIcon("4.png");
+	
+	public void resultScreen(int puntos,JFrame frame) {
+		if(puntos <=5 ) {
+			resultScreen.setIcon(ending1);
+		}
+		else if(puntos <= 10 && puntos > 5) {
+			resultScreen.setIcon(ending2);
+		}
+		else if(puntos <= 17 && puntos > 10) {
+			resultScreen.setIcon(ending3);
+		}
+		else if(puntos >= 20 && puntos > 17) {
+			resultScreen.setIcon(ending2);
+		}
+		frame.add(resultScreen);
 		
 	}
 	
@@ -456,15 +519,120 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		/}
 		
 	*/}
-
+	
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if(e.getSource()==pizaPlabel) {
 			
 			pizaManager.itemDrop(currentlyPressed,pizaManager.pizaC);
+			switch(currentlyPressed) {
+				case 4:
+					if(pp1) {
+						if(pp2) {
+							if(pp3) {
+								if(pp4) {
+									if(pp5) {
+										break;
+									}else {
+										pIng5.setIcon(seaWIMGP);
+										pp5 = true;
+										break;
+									}
+								}else {
+									pIng4.setIcon(seaWIMGP);
+									pp4 = true;
+									break;
+								}
+							}else {
+								pIng3.setIcon(seaWIMGP);
+								pp3 = true;
+								break;
+							}
+							
+						}else {
+							pIng2.setIcon(seaWIMGP);
+							pp2 = true;
+							break;
+							
+						}
+					}else {
+						pIng1.setIcon(seaWIMGP);
+						pp1 = true;
+						break;
+					}
+					
+				case 5:
+					if(pp1) {
+						if(pp2) {
+							if(pp3) {
+								if(pp4) {
+									if(pp5) {
+										break;
+									}else {
+										pIng5.setIcon(anchIMGP);
+										pp5 = true;
+										break;
+									}
+								}else {
+									pIng4.setIcon(anchIMGP);
+									pp4 = true;
+									break;
+								}
+							}else {
+								pIng3.setIcon(anchIMGP);
+								pp3 = true;
+								break;
+							}
+							
+						}else {
+							pIng2.setIcon(anchIMGP);
+							pp2 = true;
+							break;
+							
+						}
+					}else {
+						pIng1.setIcon(anchIMGP);
+						pp1 = true;
+						break;
+					}
+				case 6:
+					if(pp1) {
+						if(pp2) {
+							if(pp3) {
+								if(pp4) {
+									if(pp5) {
+										break;
+									}else {
+										pIng5.setIcon(calIMGP);
+										pp5 = true;
+										break;
+									}
+								}else {
+									pIng4.setIcon(calIMGP);
+									pp4 = true;
+									break;
+								}
+							}else {
+								pIng3.setIcon(calIMGP);
+								pp3 = true;
+								break;
+							}
+							
+						}else {
+							pIng2.setIcon(calIMGP);
+							pp2 = true;
+							break;
+							
+						}
+					}else {
+						pIng1.setIcon(calIMGP);
+						pp1 = true;
+						break;
+					}
+			}
 			pizaPlabel.setIcon(pizaManager.iconSeterCases(currentlyPressed, pizaManager.pizaC));
 			currentlyPressed = 0;
-			isFinished = pizaManager.pizaChecker(pizaManager.order, pizaManager.pizaC);
+			
 			
 			
 			}
@@ -533,16 +701,65 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		if(place ==2) {
 			
 			
-			pizaPos = pizaPos +xVel;
+			pizaPos = pizaPos +xVel+puntos/2;
+			
 			pizaPlabel.setLocation(pizaPos, 574);
 			
 			isFinished = pizaManager.pizaChecker(pizaManager.order, pizaManager.pizaC);
 			if(isFinished==1) {
+				pizaManager.initializeOrder(pizaManager.order);
 				pizaManager.startArrays(pizaManager.order, pizaManager.pizaC);
 				pizaPlabel.setIcon(pizaBaseIMG);
 				xVel = 100;
+				if(pizaManager.order.get(0)==1) {
+					pizaWlabelIMG  = new ImageIcon("pizza_baseWSauce1.png");
+					pizaWlabel.setText("  Marinara");
+					pizaWlabel.setIcon(pizaWlabelIMG);
+
+				}
+				else if (pizaManager.order.get(1)==1) {
+					pizaWlabelIMG  = new ImageIcon("pizza_baseWSauce2.png");
+					pizaWlabel.setText("  Hot Sauce");
+					pizaWlabel.setIcon(pizaWlabelIMG);
+				}
+				ing1NO = pizaManager.order.get(3);
+				ing2NO = pizaManager.order.get(4);
+				ing3NO = pizaManager.order.get(5);
+				ingLW.setText("  X "+ing1NO);
+				ing2LW.setText("  X "+ing2NO);
+				ing3LW.setText("  X "+ing3NO);
+				pIng1.setIcon(null);
+				pIng2.setIcon(null);
+				pIng3.setIcon(null);
+				pIng4.setIcon(null);
+				pIng5.setIcon(null);
+				pp1 = false;
+				pp2 = false;
+				pp3 = false;
+				pp4 = false;
+				pp5 = false;
+				puntos = puntos +1;
+				puntosL.setText("  X "+puntos);
+				
 			}else if (isFinished == 2) {
 				pizaManager.startArrays(pizaManager.order, pizaManager.pizaC);
+				pizaWlabel.setIcon(pizaWlabelIMG);
+				ing1NO = pizaManager.order.get(3);
+				ing2NO = pizaManager.order.get(4);
+				ing3NO = pizaManager.order.get(5);
+				ingLW.setText("  X "+ing1NO);
+				ing2LW.setText("  X "+ing2NO);
+				ing3LW.setText("  X "+ing3NO);
+				pIng1.setIcon(null);
+				pIng2.setIcon(null);
+				pIng3.setIcon(null);
+				pIng4.setIcon(null);
+				pIng5.setIcon(null);
+				pp1 = false;
+				pp2 = false;
+				pp3 = false;
+				pp4 = false;
+				pp5 = false;
 				pizaPos =0;
 				
 			}else if (isFinished ==3) {
@@ -553,7 +770,12 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 				pizaPos=0;
 				xVel =1; 
 			}
-			//System.out.println(isFinished);
+			
+			
+		}
+		if(e.getSource()==endG) {
+			background.setVisible(false);
+			resultScreen(puntos, this);
 			
 		}
 	}
