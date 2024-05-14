@@ -24,6 +24,7 @@ public class Music {
 		 clip.open(audio);
 		 fc =  (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
 		clip.start();
+		clip.loop(50);
 	}
 	
 	public void volumeCH(float vol) {

@@ -39,6 +39,7 @@ import co.edu.unbosque.model.CurrentPizza;
 
 public class MainWindow extends JFrame implements MouseListener, ActionListener, ChangeListener{
 	
+	
 	int pizaPos=0;
 	int puntos = 0;
 	int place = 0;
@@ -376,9 +377,14 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		
 		
 	}
-	
-	JLabel resultScreen = new JLabel();
-	ImageIcon ending1 = new ImageIcon("1.png"),ending2 = new ImageIcon("2.png"),ending3 = new ImageIcon("3.png"),ending4 = new ImageIcon("4.png");
+	JPanel mainPart = new JPanel(),empty = new JPanel();
+	JLabel resultScreen = new JLabel(),avatar = new JLabel();
+	JTextField name = new JTextField();
+	ImageIcon ending1 = new ImageIcon("1.png"),ending2 = new ImageIcon("2.png"),ending3 = new ImageIcon("3.png"),ending4 = new ImageIcon("4.png"),ok = new ImageIcon("ButtonSummit.png"),
+			blackP=new ImageIcon("BlackPenguin.png"),whiteP=new ImageIcon("WhitePenguin.png"),yellowP=new ImageIcon("YellowPenguin.png"),blueP=new ImageIcon("BluePenguin.png"),redP=new ImageIcon("redPenguin.png"),greenP=new ImageIcon("GreenPenguin.png");
+	JButton summit = new JButton(ok);
+	String[] colors = {"red","yellow","green","blue","white","black"};
+	JComboBox color = new JComboBox(colors) ;
 	
 	public void resultScreen(int puntos,JFrame frame) {
 		if(puntos <=5 ) {
@@ -393,7 +399,40 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		else if(puntos >= 20 && puntos > 17) {
 			resultScreen.setIcon(ending2);
 		}
+		
+		mainPart.setOpaque(false);
+		empty.setOpaque(false);
+		color.setOpaque(false);
+		name.setEditable(true);
+		name.setOpaque(false);
+		name.setBounds(0,0,150,20);
+		color.addActionListener(this);
+		
+		
+		name.setBorder(BorderFactory.createEtchedBorder());
+		name.setForeground(Color.BLACK);
+		name.setPreferredSize(new Dimension(100,100));
+		name.setFont(new Font("Impact", Font.PLAIN,50));
+		
+		summit.setContentAreaFilled(false);
+		summit.setBorder(BorderFactory.createEmptyBorder());
+		summit.addActionListener(this);
+		
+		
 		frame.add(resultScreen);
+		resultScreen.setLayout(new BorderLayout());
+		resultScreen.add(mainPart,BorderLayout.WEST);
+		resultScreen.add(empty,BorderLayout.CENTER);
+		resultScreen.setPreferredSize(new Dimension(300,800));
+		avatar.setIcon(whiteP);
+		mainPart.setLayout(new GridLayout(5,1));
+		mainPart.add(puntosL);
+		mainPart.add(name);
+		mainPart.add(summit);
+		mainPart.add(color);
+		mainPart.add(avatar);
+		
+		
 		
 	}
 	
@@ -743,6 +782,7 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 				
 			}else if (isFinished == 2) {
 				pizaManager.startArrays(pizaManager.order, pizaManager.pizaC);
+				pizaPlabel.setIcon(pizaBaseIMG);
 				pizaWlabel.setIcon(pizaWlabelIMG);
 				ing1NO = pizaManager.order.get(3);
 				ing2NO = pizaManager.order.get(4);
@@ -776,7 +816,34 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		if(e.getSource()==endG) {
 			background.setVisible(false);
 			resultScreen(puntos, this);
+			endG.stop();
+			time.stop();
 			
+		}
+		if(e.getSource()==summit) {
+			System.out.println(name.getText()+"  "+color.getSelectedItem()+puntos);
+			summit.setEnabled(false);
+		}
+		
+		if(e.getSource()==color) {
+			if(color.getSelectedItem()=="yellow") {
+				avatar.setIcon(yellowP);
+			}
+			else if(color.getSelectedItem()=="blue") {
+				avatar.setIcon(blueP);
+			}
+			else if(color.getSelectedItem()=="red") {
+				avatar.setIcon(redP);
+			}
+			else if(color.getSelectedItem()=="green") {
+				avatar.setIcon(greenP);
+			}
+			else if(color.getSelectedItem()=="black") {
+				avatar.setIcon(blackP);
+			}
+			else if(color.getSelectedItem()=="white") {
+				avatar.setIcon(whiteP);
+			}
 		}
 	}
 
