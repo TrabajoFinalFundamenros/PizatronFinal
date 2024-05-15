@@ -790,6 +790,17 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 				ingLW.setText("  X "+ing1NO);
 				ing2LW.setText("  X "+ing2NO);
 				ing3LW.setText("  X "+ing3NO);
+				if(pizaManager.order.get(0)==1) {
+					pizaWlabelIMG  = new ImageIcon("pizza_baseWsCholate.png");
+					pizaWlabel.setText("Chocolate");
+					pizaWlabel.setIcon(pizaWlabelIMG);
+
+				}
+				else if (pizaManager.order.get(1)==1) {
+					pizaWlabelIMG  = new ImageIcon("pizza_baseWicing.png");
+					pizaWlabel.setText("Icing");
+					pizaWlabel.setIcon(pizaWlabelIMG);
+				}
 				pIng1.setIcon(null);
 				pIng2.setIcon(null);
 				pIng3.setIcon(null);
