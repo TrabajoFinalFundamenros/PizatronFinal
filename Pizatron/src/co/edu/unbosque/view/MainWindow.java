@@ -801,6 +801,17 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 				pp4 = false;
 				pp5 = false;
 				pizaPos =0;
+				if(pizaManager.order.get(0)==1) {
+					pizaWlabelIMG  = new ImageIcon("pizza_baseWSauce1.png");
+					pizaWlabel.setText("  Marinara");
+					pizaWlabel.setIcon(pizaWlabelIMG);
+
+				}
+				else if (pizaManager.order.get(1)==1) {
+					pizaWlabelIMG  = new ImageIcon("pizza_baseWSauce2.png");
+					pizaWlabel.setText("  Hot Sauce");
+					pizaWlabel.setIcon(pizaWlabelIMG);
+				}
 				
 			}else if (isFinished ==3) {
 				pizaManager.startArrays(pizaManager.order, pizaManager.pizaC);
@@ -821,7 +832,7 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 			
 		}
 		if(e.getSource()==summit) {
-			System.out.println(name.getText()+"  "+color.getSelectedItem()+puntos);
+			//pizaManager.setNewScore(name.getText(), color.getSelectedItem(), puntos);
 			summit.setEnabled(false);
 		}
 		
