@@ -36,9 +36,10 @@ import javax.swing.JLayeredPane;
 
 import co.edu.unbosque.view.Music;
 import co.edu.unbosque.model.CurrentPizza;
+import co.edu.unbosque.model.Puntajes;
 
 public class MainWindow extends JFrame implements MouseListener, ActionListener, ChangeListener{
-	
+	Puntajes puntajes = new Puntajes();
 	
 	int pizaPos=0;
 	int puntos = 0;
@@ -158,11 +159,8 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		leaderboard = new JTextPane();
 		leaderboard.setBorder(BorderFactory.createEtchedBorder());
 		leaderboard.setBackground(new Color(0x2C4E80));
-		appendToPane(leaderboard, "Position : Player : Score,\n\n", Color.WHITE,30);
-		appendToPane(leaderboard, "1 :  AAA : 2000,\n", Color.WHITE,20);
-		appendToPane(leaderboard, "2 : ABBB : 1000,\n", Color.WHITE,20);
+		puntajes.leaderboardsConfig(leaderboard);
 		leaderboard.setEditable(false);
-		
 		
 		
 		
@@ -212,7 +210,7 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		pizaManager.startArrays(pizaManager.order, pizaManager.pizaC);
 		pizaBaseIMG = new ImageIcon("pizza_base_clear.png");
 		pizaPlabel.setIcon(pizaBaseIMG);
-		endG = new Timer(100000,this);
+		endG = new Timer(10,this);
 		endG.start();
 		
 		background.setIcon(backgrounIMG);
@@ -847,7 +845,7 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 			
 		}
 		if(e.getSource()==summit) {
-			System.out.println(name.getText()+"  "+color.getSelectedItem()+puntos);
+			puntajes.guardarPuntaje(name, puntos, color.getSelectedItem());
 			summit.setEnabled(false);
 		}
 		

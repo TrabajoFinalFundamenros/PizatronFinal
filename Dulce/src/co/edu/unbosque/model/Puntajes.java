@@ -15,7 +15,7 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 
-public class Puntaje {
+public class Puntajes {
 	private JTextField nombreUsuarioTextField;
    
 	public void guardarPuntaje(JTextField nombreUsuarioTextField,int puntaje,Object object) {
@@ -23,7 +23,7 @@ public class Puntaje {
 
         if (!nombreUsuario.isEmpty()) {
             try (PrintWriter writer = new PrintWriter(new FileWriter("puntajes.txt", true))) {
-                writer.println(nombreUsuario + ": " + puntaje+": "+object+" ");
+                writer.println(nombreUsuario + ": " + puntaje+": "+object+"  ");
                 writer.flush(); // Forzamos a vaciar el buffer para asegurarnos de que los datos se guarden
                 
                 nombreUsuarioTextField.setText("");
@@ -58,7 +58,7 @@ public class Puntaje {
 	        }
 		
 	leaderboard.setBackground(new Color(0x2C4E80));
-	appendToPane(leaderboard, "name : color : Score \n\n", Color.WHITE,30);
+	appendToPane(leaderboard, "name : Score: Color \n\n", Color.WHITE,30);
 	 try (BufferedReader br = new BufferedReader(new FileReader(nombreArchivo))) {
 		 String linea;
 		 while ((linea = br.readLine()) != null) {
