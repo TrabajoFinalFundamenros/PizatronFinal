@@ -210,7 +210,7 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		pizaManager.startArrays(pizaManager.order, pizaManager.pizaC);
 		pizaBaseIMG = new ImageIcon("pizza_base_clear.png");
 		pizaPlabel.setIcon(pizaBaseIMG);
-		endG = new Timer(10,this);
+		endG = new Timer(100000,this);
 		endG.start();
 		
 		background.setIcon(backgrounIMG);
