@@ -207,6 +207,7 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 	int ing3NO ;
 	
 	public void game(JFrame frame){
+		xVel = 1;
 		pizaManager.initializeOrder(pizaManager.order);
 		pizaManager.startArrays(pizaManager.order, pizaManager.pizaC);
 		pizaBaseIMG = new ImageIcon("pizza_base_clear.png");
@@ -373,6 +374,19 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		
 		
 		
+		
+		
+		
+	}
+	ImageIcon tutorial = new ImageIcon("tutorial.png");
+	JLabel tutorialL = new JLabel();
+	public void tutorial(JFrame frame) {
+		tutorialL.setVisible(true);
+		
+		tutorialL.setIcon(tutorial);
+		tutorialL.setText("texto");
+		frame.add(tutorialL);
+		//frame.add(backB);
 		
 		
 		
@@ -716,6 +730,7 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 				System.out.println("tutorial");
 				left.setVisible(false);
 				right.setVisible(false);
+				tutorial(this);
 			}
 		}
 		if(place==1) {

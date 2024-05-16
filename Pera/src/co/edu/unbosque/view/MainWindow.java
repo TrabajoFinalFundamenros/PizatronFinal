@@ -182,6 +182,30 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		
 		
 	}
+	ImageIcon tutorial = new ImageIcon("tutorial.png");
+	JLabel tutorialL = new JLabel();
+	public void tutorial(JFrame frame) {
+		tutorialL.setVisible(true);
+		
+		tutorialL.setIcon(tutorial);
+		tutorialL.setText("texto");
+		frame.add(tutorialL);
+		
+		backB.setContentAreaFilled(false);
+		backB.setIcon(backBIMG);
+		backB.setBorder(BorderFactory.createEmptyBorder());
+		backB.addActionListener(this);
+		backB.setBounds(600, 0, 500, 500);
+		backB.setFocusable(false);
+		
+		place = 3;
+		
+		tutorialL.add(backB);
+		
+		
+		
+		
+	}
 	
 	JLayeredPane whiteboard = new JLayeredPane(),costumers = new JLayeredPane();
 	JLabel pizaWlabel= new JLabel(),ingLW= new JLabel(),ing2LW= new JLabel(),ing3LW= new JLabel(),ing1= new JLabel(),ing2= new JLabel(),ing3= new JLabel(),background = new JLabel(),sauce1 = new JLabel(),sauce2 = new JLabel(),
@@ -716,6 +740,7 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 				System.out.println("tutorial");
 				left.setVisible(false);
 				right.setVisible(false);
+				tutorial(this);
 			}
 		}
 		if(place==1) {
@@ -737,6 +762,14 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 				
 			}
 		}
+		if(place == 3) {
+			if(e.getSource()==backB) {
+				configPanel.setVisible(false);
+				changeLaunchMenu(left,right);
+				
+			}
+		}
+		
 		if(place ==2) {
 			
 			
